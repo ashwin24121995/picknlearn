@@ -93,6 +93,9 @@ This guide will walk you through deploying the Pick N Learn fantasy cricket educ
    
    # Node Environment
    NODE_ENV=production
+   
+   # Port Configuration (optional, Railway auto-assigns)
+   PORT=8080
    ```
 
 3. **Important notes:**

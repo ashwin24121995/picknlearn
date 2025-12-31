@@ -301,3 +301,10 @@
 - [x] Update deployment docs for Railway
 - [x] Push to GitHub (https://github.com/ashwin24121995/picknlearn)
 - [ ] Provide Railway deployment instructions
+
+
+## Port Configuration
+- [x] Update server to run on port 8080
+- [x] Update deployment docs with port configuration
+- [x] Test server on port 8080
+- [ ] Push changes to GitHub
