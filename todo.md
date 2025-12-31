@@ -265,3 +265,29 @@
 - [x] FAQ section with 6 common questions
 - [x] Call-to-action sections throughout
 - [x] Professional footer with links
+
+
+## Page Enhancements (ALL PAGES)
+- [ ] Lessons page - Add filtering, sorting, category tabs, progress indicators
+- [ ] Lesson Detail page - Add bookmark button, mark complete, related lessons, visual components integration
+- [ ] Quizzes page - Enhanced layout with detailed descriptions, difficulty indicators, completion status
+- [ ] Quiz Detail page - Better question UI, explanations, results summary, retry functionality
+- [ ] Glossary page - Advanced search, category filtering, related terms, examples
+- [ ] About page - Comprehensive mission, team, features, testimonials, contact
+- [ ] Dashboard page - Additional widgets, charts, recent activity, recommendations
+
+
+## New Pages Required
+- [ ] Responsible Learning page - Healthy learning habits, time management, avoiding burnout, responsible gaming
+- [ ] Add Responsible Learning link to footer
+- [ ] Create comprehensive content for Responsible Learning page
+
+
+## Legal Pages & Disclaimers (PRIORITY)
+- [ ] Create Terms & Conditions page with comprehensive terms
+- [ ] Create Privacy Policy page with detailed privacy information
+- [ ] Create Responsible Learning page with guidelines
+- [ ] Update footer with 18+ age disclaimer
+- [ ] Add state restrictions (Assam, Odisha, Telangana, Andhra Pradesh, Sikkim, Nagaland)
+- [ ] Add links to Terms, Privacy, Responsible Learning in footer
+- [ ] Ensure navigation and footer appear on ALL pages
