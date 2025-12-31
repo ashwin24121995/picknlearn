@@ -472,8 +472,50 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-white/10 pt-8 text-center text-gray-400 text-sm">
+          {/* Disclaimer Section */}
+          <div className="border-t border-white/10 pt-8 mb-8">
+            <Card className="glass-card border-yellow-500/20 bg-yellow-900/10">
+              <CardHeader>
+                <CardTitle className="text-lg text-yellow-400 flex items-center gap-2">
+                  <Shield className="w-5 h-5" />
+                  Important Disclaimer
+                </CardTitle>
+                <CardDescription className="text-gray-300 text-sm leading-relaxed space-y-3">
+                  <p>
+                    <strong className="text-white">Educational Purpose Only:</strong> Pick N Learn is an educational platform designed to teach fantasy cricket strategies, player analysis, and team-building concepts. This platform does not operate, endorse, or facilitate any real-money fantasy sports contests or gambling activities.
+                  </p>
+                  <p>
+                    <strong className="text-white">No Financial Advice:</strong> The information provided on this platform is for educational and informational purposes only. It should not be considered as financial, investment, or professional advice. Users should conduct their own research and exercise independent judgment when participating in fantasy sports.
+                  </p>
+                  <p>
+                    <strong className="text-white">Age Restriction:</strong> Fantasy sports platforms may have age restrictions in your jurisdiction. Users must be of legal age (typically 18+ years) to participate in real-money fantasy sports contests. Please verify and comply with local laws and regulations.
+                  </p>
+                  <p>
+                    <strong className="text-white">Responsible Gaming:</strong> If you choose to participate in fantasy sports contests on third-party platforms, please play responsibly. Set budgets, avoid chasing losses, and seek help if gaming becomes problematic. Fantasy sports should be entertainment, not a source of income.
+                  </p>
+                  <p>
+                    <strong className="text-white">Legal Compliance:</strong> Fantasy sports legality varies by country, state, and region. Some jurisdictions prohibit or restrict fantasy sports participation. Users are solely responsible for ensuring their participation complies with applicable laws in their location.
+                  </p>
+                  <p>
+                    <strong className="text-white">No Guarantees:</strong> Past performance and strategies discussed on this platform do not guarantee future results. Fantasy sports involve skill and chance. No strategy can ensure winning outcomes.
+                  </p>
+                  <p>
+                    <strong className="text-white">Third-Party Platforms:</strong> Pick N Learn is not affiliated with, endorsed by, or connected to any fantasy sports platform, cricket board, or sports organization. Any references to third-party platforms are for educational purposes only.
+                  </p>
+                  <p className="text-xs text-gray-400 mt-4">
+                    By using this platform, you acknowledge that you have read, understood, and agree to this disclaimer. If you do not agree, please discontinue use of this platform immediately.
+                  </p>
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+          
+          {/* Copyright */}
+          <div className="border-t border-white/10 pt-8 text-center text-gray-400 text-sm space-y-2">
             <p>&copy; 2025 Pick N Learn. All rights reserved. Built for fantasy cricket enthusiasts.</p>
+            <p className="text-xs">
+              This is an independent educational platform. Not affiliated with any fantasy sports operator or cricket organization.
+            </p>
           </div>
         </div>
       </footer>
