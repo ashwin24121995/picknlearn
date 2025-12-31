@@ -284,10 +284,12 @@
 
 
 ## Legal Pages & Disclaimers (PRIORITY)
-- [ ] Create Terms & Conditions page with comprehensive terms
-- [ ] Create Privacy Policy page with detailed privacy information
-- [ ] Create Responsible Learning page with guidelines
-- [ ] Update footer with 18+ age disclaimer
-- [ ] Add state restrictions (Assam, Odisha, Telangana, Andhra Pradesh, Sikkim, Nagaland)
-- [ ] Add links to Terms, Privacy, Responsible Learning in footer
-- [ ] Ensure navigation and footer appear on ALL pages
+- [x] Create Terms & Conditions page with comprehensive terms
+- [x] Create Privacy Policy page with detailed privacy information
+- [x] Create Responsible Learning page with guidelines
+- [x] Update footer with 18+ age disclaimer
+- [x] Add state restrictions (Assam, Odisha, Telangana, Andhra Pradesh, Sikkim, Nagaland)
+- [x] Add links to Terms, Privacy, Responsible Learning in footer
+- [x] Ensure navigation and footer appear on ALL pages
+- [x] Add routes for Terms, Privacy, and Responsible Learning pages
+- [x] All legal pages accessible and working

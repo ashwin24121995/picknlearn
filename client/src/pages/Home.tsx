@@ -465,10 +465,11 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white mb-4">Support</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">Legal</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">Help Center</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">Contact Us</a></li>
+                <li><Link href="/terms"><a className="text-gray-400 hover:text-white text-sm transition-colors">Terms & Conditions</a></Link></li>
+                <li><Link href="/privacy"><a className="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</a></Link></li>
+                <li><Link href="/responsible-learning"><a className="text-gray-400 hover:text-white text-sm transition-colors">Responsible Learning</a></Link></li>
               </ul>
             </div>
           </div>
@@ -488,7 +489,10 @@ export default function Home() {
                     <strong className="text-white">No Financial Advice:</strong> The information provided on this platform is for educational and informational purposes only. It should not be considered as financial, investment, or professional advice. Users should conduct their own research and exercise independent judgment when participating in fantasy sports.
                   </p>
                   <p>
-                    <strong className="text-white">Age Restriction:</strong> Fantasy sports platforms may have age restrictions in your jurisdiction. Users must be of legal age (typically 18+ years) to participate in real-money fantasy sports contests. Please verify and comply with local laws and regulations.
+                    <strong className="text-white">18+ Only:</strong> You must be at least 18 years of age to use this platform and participate in fantasy sports. This platform is strictly for adults only.
+                  </p>
+                  <p>
+                    <strong className="text-white">State Restrictions:</strong> Fantasy sports may be restricted or prohibited in certain Indian states. Residents of <strong className="text-yellow-400">Assam, Odisha, Telangana, Andhra Pradesh, Sikkim, and Nagaland</strong> should verify local laws before using this platform or participating in fantasy sports. We do not encourage activities that may be illegal in your jurisdiction.
                   </p>
                   <p>
                     <strong className="text-white">Responsible Gaming:</strong> If you choose to participate in fantasy sports contests on third-party platforms, please play responsibly. Set budgets, avoid chasing losses, and seek help if gaming becomes problematic. Fantasy sports should be entertainment, not a source of income.

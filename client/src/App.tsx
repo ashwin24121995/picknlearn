@@ -12,6 +12,9 @@ import QuizDetail from "./pages/QuizDetail";
 import Glossary from "./pages/Glossary";
 import About from "./pages/About";
 import Dashboard from "./pages/Dashboard";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
+import ResponsibleLearning from "./pages/ResponsibleLearning";
 
 function Router() {
   return (
@@ -24,6 +27,9 @@ function Router() {
       <Route path={"/quizzes/:slug"} component={QuizDetail} />
       <Route path={"/glossary"} component={Glossary} />
       <Route path={"/about"} component={About} />
+      <Route path={"/terms"} component={Terms} />
+      <Route path={"/privacy"} component={Privacy} />
+      <Route path={"/responsible-learning"} component={ResponsibleLearning} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
