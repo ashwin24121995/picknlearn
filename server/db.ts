@@ -1,11 +1,34 @@
-import { eq } from "drizzle-orm";
+import { eq, and, desc, asc, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { 
+  InsertUser, 
+  users,
+  lessonCategories,
+  lessons,
+  quizzes,
+  quizQuestions,
+  glossaryTerms,
+  tutorials,
+  tutorialSteps,
+  userLessonProgress,
+  userQuizAttempts,
+  userTutorialProgress,
+  userAchievements,
+  userBookmarks,
+  type LessonCategory,
+  type Lesson,
+  type Quiz,
+  type QuizQuestion,
+  type GlossaryTerm,
+  type Tutorial,
+  type TutorialStep,
+  type UserLessonProgress,
+  type UserQuizAttempt,
+} from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
-// Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
@@ -17,6 +40,8 @@ export async function getDb() {
   }
   return _db;
 }
+
+// ============= User Management =============
 
 export async function upsertUser(user: InsertUser): Promise<void> {
   if (!user.openId) {
@@ -85,8 +110,294 @@ export async function getUserByOpenId(openId: string) {
   }
 
   const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
-
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// ============= Lesson Categories =============
+
+export async function getAllLessonCategories() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(lessonCategories).orderBy(asc(lessonCategories.orderIndex));
+}
+
+export async function getLessonCategoryBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(lessonCategories).where(eq(lessonCategories.slug, slug)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+// ============= Lessons =============
+
+export async function getAllLessons() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(lessons)
+    .where(eq(lessons.isPublished, true))
+    .orderBy(asc(lessons.orderIndex));
+}
+
+export async function getLessonsByCategory(categoryId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(lessons)
+    .where(and(eq(lessons.categoryId, categoryId), eq(lessons.isPublished, true)))
+    .orderBy(asc(lessons.orderIndex));
+}
+
+export async function getLessonBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(lessons).where(eq(lessons.slug, slug)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getLessonById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(lessons).where(eq(lessons.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+// ============= Quizzes =============
+
+export async function getAllQuizzes() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(quizzes)
+    .where(eq(quizzes.isPublished, true))
+    .orderBy(desc(quizzes.createdAt));
+}
+
+export async function getQuizBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(quizzes).where(eq(quizzes.slug, slug)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getQuizById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(quizzes).where(eq(quizzes.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getQuizQuestions(quizId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(quizQuestions)
+    .where(eq(quizQuestions.quizId, quizId))
+    .orderBy(asc(quizQuestions.orderIndex));
+}
+
+// ============= Glossary =============
+
+export async function getAllGlossaryTerms() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(glossaryTerms).orderBy(asc(glossaryTerms.term));
+}
+
+export async function getGlossaryTermBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(glossaryTerms).where(eq(glossaryTerms.slug, slug)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function searchGlossaryTerms(searchTerm: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(glossaryTerms)
+    .where(sql`${glossaryTerms.term} LIKE ${`%${searchTerm}%`} OR ${glossaryTerms.definition} LIKE ${`%${searchTerm}%`}`)
+    .orderBy(asc(glossaryTerms.term));
+}
+
+export async function getGlossaryTermsByCategory(category: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(glossaryTerms)
+    .where(eq(glossaryTerms.category, category))
+    .orderBy(asc(glossaryTerms.term));
+}
+
+// ============= Tutorials =============
+
+export async function getAllTutorials() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(tutorials)
+    .where(eq(tutorials.isPublished, true))
+    .orderBy(desc(tutorials.createdAt));
+}
+
+export async function getTutorialBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(tutorials).where(eq(tutorials.slug, slug)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getTutorialSteps(tutorialId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(tutorialSteps)
+    .where(eq(tutorialSteps.tutorialId, tutorialId))
+    .orderBy(asc(tutorialSteps.orderIndex));
+}
+
+// ============= User Progress =============
+
+export async function getUserLessonProgress(userId: number, lessonId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(userLessonProgress)
+    .where(and(eq(userLessonProgress.userId, userId), eq(userLessonProgress.lessonId, lessonId)))
+    .limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function updateLessonProgress(userId: number, lessonId: number, isCompleted: boolean, timeSpent: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  const existing = await getUserLessonProgress(userId, lessonId);
+  
+  if (existing) {
+    await db.update(userLessonProgress)
+      .set({
+        isCompleted,
+        completedAt: isCompleted ? new Date() : null,
+        timeSpent: existing.timeSpent + timeSpent,
+        updatedAt: new Date(),
+      })
+      .where(eq(userLessonProgress.id, existing.id));
+  } else {
+    await db.insert(userLessonProgress).values({
+      userId,
+      lessonId,
+      isCompleted,
+      completedAt: isCompleted ? new Date() : null,
+      timeSpent,
+    });
+  }
+}
+
+export async function getUserQuizAttempts(userId: number, quizId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(userQuizAttempts)
+    .where(and(eq(userQuizAttempts.userId, userId), eq(userQuizAttempts.quizId, quizId)))
+    .orderBy(desc(userQuizAttempts.createdAt));
+}
+
+export async function saveQuizAttempt(
+  userId: number,
+  quizId: number,
+  score: number,
+  totalQuestions: number,
+  correctAnswers: number,
+  timeSpent: number | null,
+  isPassed: boolean,
+  answers: Record<string, string>
+) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.insert(userQuizAttempts).values({
+    userId,
+    quizId,
+    score,
+    totalQuestions,
+    correctAnswers,
+    timeSpent,
+    isPassed,
+    answers,
+  });
+}
+
+export async function getUserStats(userId: number) {
+  const db = await getDb();
+  if (!db) return {
+    completedLessons: 0,
+    totalQuizzes: 0,
+    averageScore: 0,
+    totalTimeSpent: 0,
+  };
+  
+  const completedLessons = await db.select({ count: sql<number>`count(*)` })
+    .from(userLessonProgress)
+    .where(and(eq(userLessonProgress.userId, userId), eq(userLessonProgress.isCompleted, true)));
+  
+  const quizStats = await db.select({
+    count: sql<number>`count(*)`,
+    avgScore: sql<number>`avg(${userQuizAttempts.score})`,
+  })
+    .from(userQuizAttempts)
+    .where(eq(userQuizAttempts.userId, userId));
+  
+  const timeSpent = await db.select({ total: sql<number>`sum(${userLessonProgress.timeSpent})` })
+    .from(userLessonProgress)
+    .where(eq(userLessonProgress.userId, userId));
+  
+  return {
+    completedLessons: completedLessons[0]?.count || 0,
+    totalQuizzes: quizStats[0]?.count || 0,
+    averageScore: Math.round(quizStats[0]?.avgScore || 0),
+    totalTimeSpent: timeSpent[0]?.total || 0,
+  };
+}
+
+// ============= Bookmarks =============
+
+export async function getUserBookmarks(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select({
+    id: userBookmarks.id,
+    lessonId: userBookmarks.lessonId,
+    createdAt: userBookmarks.createdAt,
+    lesson: lessons,
+  })
+    .from(userBookmarks)
+    .leftJoin(lessons, eq(userBookmarks.lessonId, lessons.id))
+    .where(eq(userBookmarks.userId, userId))
+    .orderBy(desc(userBookmarks.createdAt));
+}
+
+export async function addBookmark(userId: number, lessonId: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.insert(userBookmarks).values({ userId, lessonId });
+}
+
+export async function removeBookmark(userId: number, lessonId: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.delete(userBookmarks)
+    .where(and(eq(userBookmarks.userId, userId), eq(userBookmarks.lessonId, lessonId)));
+}
