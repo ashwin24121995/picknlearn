@@ -136,3 +136,69 @@
 - [ ] Performance testing
 - [ ] Accessibility testing
 - [ ] User flow testing
+
+
+## Visual Enhancements (NEW)
+- [ ] Search and download cricket images (hero, players, stadiums)
+- [ ] Add hero background images to Home page
+- [ ] Add lesson thumbnail images
+- [ ] Add player analysis visual examples
+- [ ] Create strategy diagrams and infographics
+- [ ] Add quiz result visualizations
+- [ ] Add glossary term illustrations
+- [ ] Optimize all images to WebP format
+
+## Content Depth Enhancements (NEW)
+- [ ] Expand Lesson 1 with real match examples
+- [ ] Expand Lesson 2 with player statistics
+- [ ] Expand Lesson 3 with scoring breakdowns
+- [ ] Expand Lesson 4 with contest comparisons
+- [ ] Expand Lesson 5 with form analysis charts
+- [ ] Expand Lesson 6 with bonus calculation examples
+- [ ] Add 16+ more comprehensive lessons
+- [ ] Add real player case studies
+- [ ] Add statistical analysis sections
+- [ ] Add visual strategy breakdowns
+
+## Additional Lessons to Create
+- [ ] Lesson 7: Budget Management Strategies
+- [ ] Lesson 8: Team Balance and Composition
+- [ ] Lesson 9: Captain and Vice-Captain Selection
+- [ ] Lesson 10: Pitch and Weather Analysis
+- [ ] Lesson 11: Head-to-Head Statistics
+- [ ] Lesson 12: Expected Value (EV) Concepts
+- [ ] Lesson 13: Correlation and Leverage
+- [ ] Lesson 14: Contest-Specific Strategies
+- [ ] Lesson 15: Late Swap Strategies
+- [ ] Lesson 16: Multi-Entry Strategies
+- [ ] Lesson 17: Bankroll Management
+- [ ] Lesson 18: Advanced Analytics and Tools
+- [ ] Lesson 19: Tournament Selection
+- [ ] Lesson 20: Risk Management
+- [ ] Lesson 21: Game Theory in Fantasy Cricket
+- [ ] Lesson 22: Professional Player Insights
+
+## Enhanced Quiz System
+- [ ] Add 5+ more quizzes
+- [ ] Add scenario-based questions with images
+- [ ] Add detailed explanations with visuals
+- [ ] Add progress charts and analytics
+
+## Enhanced Glossary
+- [ ] Add 35+ more terms (total 50+)
+- [ ] Add visual examples for each term
+- [ ] Add related strategy links
+- [ ] Add term usage in real scenarios
+
+
+## CSS-Based Visual Components (NEW PRIORITY)
+- [x] Create ScoringSystemCard component with CSS
+- [x] Create PlayerRolesGrid component with CSS
+- [ ] Create CaptainSelectionFlowchart component with CSS
+- [x] Create BudgetAllocationChart component with CSS
+- [ ] Create TeamCompositionGuide component with CSS
+- [ ] Create PitchTypesComparison component with CSS
+- [ ] Create FormAnalysisChart component with CSS
+- [ ] Create ContestTypesComparison component with CSS
+- [ ] Add animations and hover effects to all components
+- [ ] Make all components fully responsive
