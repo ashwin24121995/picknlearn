@@ -11,11 +11,13 @@ import Quizzes from "./pages/Quizzes";
 import QuizDetail from "./pages/QuizDetail";
 import Glossary from "./pages/Glossary";
 import About from "./pages/About";
+import Dashboard from "./pages/Dashboard";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/lessons"} component={Lessons} />
       <Route path={"/lessons/:slug"} component={LessonDetail} />
       <Route path={"/quizzes"} component={Quizzes} />

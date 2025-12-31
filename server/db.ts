@@ -281,24 +281,24 @@ export async function updateLessonProgress(userId: number, lessonId: number, isC
   const db = await getDb();
   if (!db) return;
   
-  const existing = await getUserLessonProgress(userId, lessonId);
+  const existing = await db.select().from(userLessonProgress).where(and(eq(userLessonProgress.userId, userId), eq(userLessonProgress.lessonId, lessonId))).limit(1);
   
-  if (existing) {
+  if (existing.length > 0) {
     await db.update(userLessonProgress)
       .set({
-        isCompleted,
+        completed: isCompleted ? "true" : "false",
         completedAt: isCompleted ? new Date() : null,
-        timeSpent: existing.timeSpent + timeSpent,
+        timeSpentMinutes: (existing[0]?.timeSpentMinutes || 0) + timeSpent,
         updatedAt: new Date(),
       })
-      .where(eq(userLessonProgress.id, existing.id));
+      .where(and(eq(userLessonProgress.userId, userId), eq(userLessonProgress.lessonId, lessonId)));
   } else {
     await db.insert(userLessonProgress).values({
       userId,
       lessonId,
-      isCompleted,
+      completed: isCompleted ? "true" : "false",
       completedAt: isCompleted ? new Date() : null,
-      timeSpent,
+      timeSpentMinutes: timeSpent,
     });
   }
 }
@@ -348,7 +348,7 @@ export async function getUserStats(userId: number) {
   
   const completedLessons = await db.select({ count: sql<number>`count(*)` })
     .from(userLessonProgress)
-    .where(and(eq(userLessonProgress.userId, userId), eq(userLessonProgress.isCompleted, true)));
+    .where(and(eq(userLessonProgress.userId, userId), eq(userLessonProgress.completed, "true")));
   
   const quizStats = await db.select({
     count: sql<number>`count(*)`,
@@ -357,7 +357,7 @@ export async function getUserStats(userId: number) {
     .from(userQuizAttempts)
     .where(eq(userQuizAttempts.userId, userId));
   
-  const timeSpent = await db.select({ total: sql<number>`sum(${userLessonProgress.timeSpent})` })
+  const timeSpent = await db.select({ total: sql<number>`sum(${userLessonProgress.timeSpentMinutes})` })
     .from(userLessonProgress)
     .where(eq(userLessonProgress.userId, userId));
   

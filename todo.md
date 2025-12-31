@@ -202,3 +202,55 @@
 - [ ] Create ContestTypesComparison component with CSS
 - [ ] Add animations and hover effects to all components
 - [ ] Make all components fully responsive
+
+
+## NEW FEATURES - Content Expansion & User Dashboard
+
+### Additional Lessons (10-15 lessons)
+- [ ] Lesson: Advanced Captain Selection Strategies
+- [ ] Lesson: Multi-Entry Tournament Tactics
+- [ ] Lesson: Bankroll Management for Fantasy Cricket
+- [ ] Lesson: Weather and Dew Factor Analysis
+- [ ] Lesson: Toss Impact and Batting Order Strategy
+- [ ] Lesson: Player Ownership and Leverage Theory
+- [ ] Lesson: Contest Selection Strategy (H2H vs GPP)
+- [ ] Lesson: Late Swap and Last-Minute Changes
+- [ ] Lesson: Analyzing Team Combinations
+- [ ] Lesson: Budget Optimization Techniques
+- [ ] Lesson: Form vs Reputation - When to Fade Stars
+- [ ] Lesson: Venue-Specific Player Selection
+- [ ] Lesson: Death Overs Specialists
+- [ ] Lesson: Powerplay Strategy
+- [ ] Lesson: Building Multiple Lineups
+
+### User Dashboard
+- [x] Dashboard page layout and navigation
+- [x] Progress tracking - lessons completed
+- [x] Progress tracking - quiz scores and history
+- [x] Achievements and badges system
+- [x] Bookmark functionality for lessons
+- [x] Bookmark functionality for glossary terms
+- [x] User statistics and analytics
+- [x] Recent activity feed
+- [x] Learning streak tracker
+- [ ] Personalized recommendations (future enhancement)
+
+### Database Schema Updates
+- [x] User progress table for lesson completion
+- [x] Quiz attempts history table (already existed)
+- [x] Achievements table
+- [x] User achievements junction table
+- [x] Bookmarks table for lessons and terms
+- [x] User statistics table
+
+### API Endpoints (tRPC)
+- [x] Progress tracking procedures
+- [x] Achievements procedures
+- [x] Bookmarks procedures
+- [x] Dashboard data aggregation procedures
+
+### Testing
+- [ ] Tests for progress tracking
+- [ ] Tests for achievements system
+- [ ] Tests for bookmarks functionality
+- [ ] Tests for dashboard data aggregation

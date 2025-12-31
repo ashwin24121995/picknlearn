@@ -18,8 +18,78 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
+// User Progress Tracking
+export const userLessonProgress = mysqlTable("user_lesson_progress", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  lessonId: int("lessonId").notNull(),
+  completed: mysqlEnum("completed", ["true", "false"]).default("false").notNull(),
+  completedAt: timestamp("completedAt"),
+  timeSpentMinutes: int("timeSpentMinutes").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UserLessonProgress = typeof userLessonProgress.$inferSelect;
+export type InsertUserLessonProgress = typeof userLessonProgress.$inferInsert;
+
+// Bookmarks
+export const bookmarks = mysqlTable("bookmarks", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  itemType: mysqlEnum("itemType", ["lesson", "glossary"]).notNull(),
+  itemId: int("itemId").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Bookmark = typeof bookmarks.$inferSelect;
+export type InsertBookmark = typeof bookmarks.$inferInsert;
+
+// Achievements
+export const achievements = mysqlTable("achievements", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description").notNull(),
+  icon: varchar("icon", { length: 100 }).notNull(),
+  category: mysqlEnum("category", ["lessons", "quizzes", "engagement", "mastery"]).notNull(),
+  requirement: int("requirement").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Achievement = typeof achievements.$inferSelect;
+export type InsertAchievement = typeof achievements.$inferInsert;
+
+// User Achievements
+export const userAchievements = mysqlTable("user_achievements", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  achievementId: int("achievementId").notNull(),
+  unlockedAt: timestamp("unlockedAt").defaultNow().notNull(),
+});
+
+export type UserAchievement = typeof userAchievements.$inferSelect;
+export type InsertUserAchievement = typeof userAchievements.$inferInsert;
+
+// User Statistics
+export const userStatistics = mysqlTable("user_statistics", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  totalLessonsCompleted: int("totalLessonsCompleted").default(0).notNull(),
+  totalQuizzesTaken: int("totalQuizzesTaken").default(0).notNull(),
+  totalQuizzesPassed: int("totalQuizzesPassed").default(0).notNull(),
+  averageQuizScore: int("averageQuizScore").default(0).notNull(),
+  currentStreak: int("currentStreak").default(0).notNull(),
+  longestStreak: int("longestStreak").default(0).notNull(),
+  lastActivityDate: timestamp("lastActivityDate"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UserStatistics = typeof userStatistics.$inferSelect;
+export type InsertUserStatistics = typeof userStatistics.$inferInsert;
+
 /**
- * Lesson categories for organizing curriculum
+ * Lesson Categories - For organizing curriculum
  */
 export const lessonCategories = mysqlTable("lesson_categories", {
   id: int("id").autoincrement().primaryKey(),
@@ -149,23 +219,6 @@ export type TutorialStep = typeof tutorialSteps.$inferSelect;
 export type InsertTutorialStep = typeof tutorialSteps.$inferInsert;
 
 /**
- * User progress for lessons
- */
-export const userLessonProgress = mysqlTable("user_lesson_progress", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
-  lessonId: int("lessonId").notNull(),
-  isCompleted: boolean("isCompleted").notNull().default(false),
-  completedAt: timestamp("completedAt"),
-  timeSpent: int("timeSpent").notNull().default(0), // Seconds
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-
-export type UserLessonProgress = typeof userLessonProgress.$inferSelect;
-export type InsertUserLessonProgress = typeof userLessonProgress.$inferInsert;
-
-/**
  * User quiz attempts and scores
  */
 export const userQuizAttempts = mysqlTable("user_quiz_attempts", {
@@ -200,22 +253,6 @@ export const userTutorialProgress = mysqlTable("user_tutorial_progress", {
 
 export type UserTutorialProgress = typeof userTutorialProgress.$inferSelect;
 export type InsertUserTutorialProgress = typeof userTutorialProgress.$inferInsert;
-
-/**
- * User achievements/badges
- */
-export const userAchievements = mysqlTable("user_achievements", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
-  achievementType: varchar("achievementType", { length: 50 }).notNull(),
-  title: varchar("title", { length: 100 }).notNull(),
-  description: text("description"),
-  icon: varchar("icon", { length: 50 }),
-  earnedAt: timestamp("earnedAt").defaultNow().notNull(),
-});
-
-export type UserAchievement = typeof userAchievements.$inferSelect;
-export type InsertUserAchievement = typeof userAchievements.$inferInsert;
 
 /**
  * User bookmarks for lessons
