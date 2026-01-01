@@ -422,3 +422,12 @@
 - [x] Added COPY patches ./patches before dependencies stage
 - [ ] Push fix to Railway
 - [ ] Verify deployment succeeds
+
+
+## Debug Railway Registration Failure (COMPLETED)
+- [x] Check Railway deployment logs for backend errors
+- [x] Verify database tables were created successfully - NO TABLES EXIST
+- [x] Root cause: Database is empty, no tables created
+- [x] Create automatic database initialization script
+- [x] Update Railway startup to run migrations automatically (pnpm db:push before start)
+- [ ] Deploy and test registration after tables are created
