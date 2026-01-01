@@ -347,3 +347,15 @@
 - [x] Add Footer to Forgot Password page
 - [x] Test navigation on all auth pages
 - [x] Make header and footer glossy/glassy with premium styling
+
+
+## Remove All Remaining Manus References (COMPLETED)
+- [x] Remove ManusDialog component
+- [x] Update QuizDetail to use /login instead of /api/oauth/login
+- [x] Replace getLoginUrl() with direct /login links
+- [x] Update useAuth hook to redirect to /login
+- [x] Update DashboardLayout to use /login
+- [x] Update Dashboard to use /login
+- [x] Remove oAuthServerUrl from env.ts
+- [x] Update test files to remove loginMethod field
+- [ ] Test all authentication flows

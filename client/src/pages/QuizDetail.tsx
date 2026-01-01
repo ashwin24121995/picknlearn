@@ -311,11 +311,13 @@ export default function QuizDetail() {
               <p className="text-muted-foreground mb-4">
                 Please sign in to submit your quiz answers
               </p>
-              <a href={`/api/oauth/login?redirect=${encodeURIComponent(window.location.pathname)}`}>
-                <Button className="glow-primary">
-                  Sign In to Continue
-                </Button>
-              </a>
+              <Link href="/login">
+                <a>
+                  <Button className="glow-primary">
+                    Sign In to Continue
+                  </Button>
+                </a>
+              </Link>
             </Card>
           )}
         </div>
