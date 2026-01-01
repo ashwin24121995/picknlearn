@@ -447,5 +447,7 @@
 - [x] Fix tRPC input format in AuthContext.tsx (line 69) - needs { input: {...} } wrapper
 - [x] Found crash cause: drizzle.config.ts missing from Docker build
 - [x] Fix Dockerfile to include drizzle.config.ts
+- [x] Found second crash: db:push fails because tables already exist
+- [x] Remove db:push from start script (tables already created)
 - [ ] Push fix and test deployment
 - [ ] Test registration after fix
