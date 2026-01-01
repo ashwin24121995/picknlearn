@@ -12,14 +12,7 @@ router.post("/api/seed-database", async (req, res) => {
     const connection = await mysql.createConnection(ENV.databaseUrl);
     const db = drizzle(connection);
 
-    // Check if already seeded
-    const existingLessons = await db.select().from(lessons).limit(1);
-    if (existingLessons.length > 0) {
-      return res.json({
-        success: false,
-        message: "Database already contains lessons. Skipping seed to avoid duplicates.",
-      });
-    }
+    // Try to seed - if data exists, it will fail with duplicate key error which we'll catch
 
     // Seed lesson categories
     await db.insert(lessonCategories).values([
