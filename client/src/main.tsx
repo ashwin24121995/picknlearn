@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client";
 import superjson from "superjson";
 import App from "./App";
 import "./index.css";
-import { AuthProvider } from "./contexts/AuthContext";
+
 
 const queryClient = new QueryClient();
 
@@ -55,9 +55,7 @@ const trpcClient = trpc.createClient({
 createRoot(document.getElementById("root")!).render(
   <trpc.Provider client={trpcClient} queryClient={queryClient}>
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <App />
     </QueryClientProvider>
   </trpc.Provider>
 );

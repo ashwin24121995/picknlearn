@@ -16,7 +16,9 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
 
   const loginMutation = trpc.auth.login.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // Store JWT token in localStorage
+      localStorage.setItem("auth_token", data.token);
       toast.success("Welcome back! You have successfully signed in.");
       setLocation("/dashboard");
     },
