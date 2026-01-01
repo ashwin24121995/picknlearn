@@ -359,3 +359,12 @@
 - [x] Remove oAuthServerUrl from env.ts
 - [x] Update test files to remove loginMethod field
 - [ ] Test all authentication flows
+
+
+## Fix Railway Deployment Error (COMPLETED)
+- [x] Investigate "Failed to construct 'URL': Invalid URL" error - caused by old build with Manus OAuth
+- [x] Check environment variables in Railway - need to remove old Manus vars
+- [x] Fix URL construction in const.ts or other files - already fixed in latest code
+- [x] Create deployment fix guide with correct env vars
+- [ ] User needs to: Remove old Manus env vars and trigger redeploy
+- [ ] User needs to: Test deployment after Railway rebuilds
