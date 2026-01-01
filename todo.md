@@ -401,3 +401,17 @@
 - [ ] Check for any top-level await or immediate execution
 - [ ] Test build in completely clean environment
 - [ ] Consider alternative: use Dockerfile instead of Nixpacks
+
+
+## Remove All Manus-Specific Code (COMPLETED)
+- [x] Search for Manus function imports (LLM, storage, etc.)
+- [x] Remove storage.ts (storagePut/storageGet)
+- [x] Remove _core/llm.ts (invokeLLM)
+- [x] Remove _core/notification.ts (notifyOwner)
+- [x] Remove _core/voiceTranscription.ts (transcribeAudio)
+- [x] Remove _core/imageGeneration.ts (generateImage)
+- [x] Remove _core/dataApi.ts
+- [x] Remove _core/map.ts
+- [x] Update systemRouter to remove notifyOwner
+- [x] Create MySQL schema file (database-schema.sql)
+- [x] Test build without Manus dependencies - SUCCESS
