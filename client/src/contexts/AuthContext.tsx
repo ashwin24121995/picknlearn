@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ input: { email, password } }),
     });
 
     if (!response.ok) {
@@ -66,7 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password, name }),
+      body: JSON.stringify({ input: { email, password, name } }),
     });
 
     if (!response.ok) {

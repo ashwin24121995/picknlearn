@@ -431,3 +431,19 @@
 - [x] Create automatic database initialization script
 - [x] Update Railway startup to run migrations automatically (pnpm db:push before start)
 - [ ] Deploy and test registration after tables are created
+
+
+## Manually Create Tables on Railway (URGENT)
+- [ ] Navigate to Railway MySQL service
+- [ ] Use Railway CLI or MySQL client to run database-schema.sql
+- [ ] Verify all 16 tables are created
+- [ ] Test registration after tables exist
+
+
+## Fix Registration Bug on Railway (CRITICAL - IN PROGRESS)
+- [x] Verified database tables exist and are correct
+- [x] Verified environment variables are set (DATABASE_URL, JWT_SECRET, NODE_ENV)
+- [x] Checked server logs - no detailed errors visible
+- [ ] Fix tRPC input format in AuthContext.tsx (line 69) - needs { input: {...} } wrapper
+- [ ] Add error logging to registration endpoint for better debugging
+- [ ] Test registration after fix
