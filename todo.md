@@ -381,3 +381,13 @@
 - [x] Test build locally without JWT_SECRET - build succeeds
 - [ ] Deploy fix to Railway
 - [ ] Verify deployment succeeds
+
+
+## Deep Investigation of Railway Build Error (COMPLETED)
+- [x] Analyze latest Railway logs to identify exact failure point
+- [x] Check if esbuild is bundling env.ts incorrectly - found auth-utils.ts
+- [x] Look for other files accessing process.env during build - found JWT_SECRET in auth-utils.ts
+- [x] Fixed auth-utils.ts to use lazy-loaded getJwtSecret() function
+- [x] Test build without env vars - succeeds
+- [ ] Push fix to Railway
+- [ ] Verify deployment succeeds

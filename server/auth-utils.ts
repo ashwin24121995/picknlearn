@@ -1,7 +1,11 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "pick-n-learn-secret-key-change-in-production";
+// Lazy-load JWT_SECRET to avoid build-time evaluation
+function getJwtSecret(): string {
+  return process.env.JWT_SECRET || "pick-n-learn-secret-key-change-in-production";
+}
+
 const JWT_EXPIRES_IN = "7d"; // Token expires in 7 days
 
 export interface JWTPayload {
@@ -28,7 +32,7 @@ export async function comparePassword(password: string, hashedPassword: string):
  * Generate a JWT token for a user
  */
 export function generateToken(payload: JWTPayload): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  return jwt.sign(payload, getJwtSecret(), { expiresIn: JWT_EXPIRES_IN });
 }
 
 /**
@@ -36,7 +40,7 @@ export function generateToken(payload: JWTPayload): string {
  */
 export function verifyToken(token: string): JWTPayload | null {
   try {
-    return jwt.verify(token, JWT_SECRET) as JWTPayload;
+    return jwt.verify(token, getJwtSecret()) as JWTPayload;
   } catch (error) {
     return null;
   }
