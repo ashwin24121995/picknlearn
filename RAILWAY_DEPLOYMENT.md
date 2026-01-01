@@ -1,379 +1,390 @@
-# Railway Deployment Guide - Pick N Learn Platform
+# Railway Deployment Guide - Pick N Learn
 
-This guide will walk you through deploying the Pick N Learn fantasy cricket education platform to Railway with MySQL database.
+This guide will help you deploy the Pick N Learn fantasy cricket education platform to Railway with **custom email/password authentication**.
 
 ## Prerequisites
 
-- GitHub account
-- Railway account (sign up at https://railway.app)
-- Git installed locally
+1. **Railway Account**: Sign up at [railway.app](https://railway.app)
+2. **GitHub Repository**: Code is at https://github.com/ashwin24121995/picknlearn
+3. **MySQL Database**: You'll create this in Railway
 
-## Step 1: Push Code to GitHub
+## Important: Authentication System
 
-1. **Create a new repository on GitHub:**
-   - Go to https://github.com/new
-   - Repository name: `pick-n-learn-platform` (or your preferred name)
-   - Make it Public or Private (your choice)
-   - **DO NOT** initialize with README, .gitignore, or license
-   - Click "Create repository"
+**This platform now uses custom email/password authentication** (not OAuth). Users register directly on your platform with email and password. All authentication is handled securely with bcrypt password hashing and JWT tokens.
 
-2. **Push your local code to GitHub:**
+## Step 1: Create a New Project in Railway
+
+1. Go to [Railway Dashboard](https://railway.app/dashboard)
+2. Click **"New Project"**
+3. Select **"Deploy from GitHub repo"**
+4. Choose the repository: `ashwin24121995/picknlearn`
+5. Railway will automatically detect it as a Node.js project
+
+## Step 2: Add MySQL Database
+
+1. In your Railway project, click **"+ New"**
+2. Select **"Database"** → **"Add MySQL"**
+3. Railway will create a MySQL instance and provide connection details
+4. Copy the **MySQL Connection URL** (you'll need this for environment variables)
+
+## Step 3: Configure Environment Variables
+
+Go to your web service → **Variables** tab and add these:
+
+### Required Variables (MINIMUM)
+
+```env
+# Database (REQUIRED - copy from MySQL service)
+DATABASE_URL=mysql://root:YOUR_PASSWORD@YOUR_HOST:YOUR_PORT/railway
+
+# Server Configuration (REQUIRED)
+PORT=8080
+NODE_ENV=production
+
+# JWT Secret (REQUIRED - MUST be a strong random string)
+JWT_SECRET=P9kL2mN8qR5tY7wX3vB6nM1aS4dF0gH9jK2lZ5xC8vB3nM6qW9eR2tY5uI8oP1aS
+```
+
+### How to Generate a Secure JWT_SECRET
+
+**Option 1:** Run this command locally:
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+**Option 2:** Use an online generator: https://www.uuidgenerator.net/
+
+**⚠️ CRITICAL:** Never use the example JWT_SECRET in production! Generate your own random string.
+
+## Step 4: Deploy
+
+1. Railway will automatically deploy when you push to GitHub
+2. Or click **"Deploy"** in the Railway dashboard
+3. Wait for the build to complete (usually 2-5 minutes)
+
+## Step 5: Run Database Migrations
+
+After the first deployment, you need to populate the database:
+
+### Option A: Using Railway CLI (Recommended)
+
+1. Install Railway CLI:
    ```bash
-   cd /path/to/pick-n-learn-platform
-   git remote add origin https://github.com/YOUR_USERNAME/pick-n-learn-platform.git
-   git branch -M main
-   git push -u origin main
-   ```
-
-## Step 2: Set Up Railway Project
-
-1. **Log in to Railway:**
-   - Go to https://railway.app
-   - Sign in with your GitHub account
-
-2. **Create a new project:**
-   - Click "New Project"
-   - Select "Deploy from GitHub repo"
-   - Choose your `pick-n-learn-platform` repository
-   - Railway will automatically detect it as a Node.js project
-
-## Step 3: Add MySQL Database
-
-1. **Add MySQL service:**
-   - In your Railway project dashboard
-   - Click "+ New"
-   - Select "Database"
-   - Choose "MySQL"
-   - Railway will provision a MySQL database
-
-2. **Get database connection string:**
-   - Click on the MySQL service
-   - Go to "Variables" tab
-   - Copy the `DATABASE_URL` value
-   - It will look like: `mysql://user:password@host:port/database`
-
-## Step 4: Configure Environment Variables
-
-1. **Go to your web service (not the database):**
-   - Click on your main application service
-   - Go to "Variables" tab
-   - Click "+ New Variable"
-
-2. **Add required environment variables:**
-
-   ```env
-   # Database
-   DATABASE_URL=<paste the MySQL DATABASE_URL from Step 3>
-   
-   # JWT Secret (generate a random 32-character string)
-   JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-   
-   # OAuth Configuration (Manus OAuth - keep as is for now)
-   OAUTH_SERVER_URL=https://api.manus.im
-   VITE_OAUTH_PORTAL_URL=https://auth.manus.im
-   VITE_APP_ID=pick-n-learn
-   
-   # Owner Information (your details)
-   OWNER_OPEN_ID=your-open-id
-   OWNER_NAME=Your Name
-   
-   # Built-in Services (optional, for future features)
-   BUILT_IN_FORGE_API_URL=https://forge.manus.im
-   BUILT_IN_FORGE_API_KEY=your-api-key-if-needed
-   VITE_FRONTEND_FORGE_API_KEY=your-frontend-api-key
-   VITE_FRONTEND_FORGE_API_URL=https://forge.manus.im
-   
-   # Analytics (optional)
-   VITE_ANALYTICS_ENDPOINT=your-analytics-endpoint
-   VITE_ANALYTICS_WEBSITE_ID=your-website-id
-   
-   # App Configuration
-   VITE_APP_TITLE=Pick N Learn
-   VITE_APP_LOGO=/logo.png
-   
-   # Node Environment
-   NODE_ENV=production
-   
-   # Port Configuration (optional, Railway auto-assigns)
-   PORT=8080
-   ```
-
-3. **Important notes:**
-   - Replace `JWT_SECRET` with a strong random string (use a password generator)
-   - Update `OWNER_OPEN_ID` and `OWNER_NAME` with your information
-   - The OAuth variables can stay as-is for now (authentication will work)
-
-## Step 5: Configure Build Settings
-
-Railway should auto-detect the build settings, but verify:
-
-1. **Build Command:** `pnpm build`
-2. **Start Command:** `pnpm start`
-3. **Install Command:** `pnpm install`
-
-If not auto-detected:
-- Go to "Settings" tab
-- Scroll to "Build & Deploy"
-- Set the commands manually
-
-## Step 6: Run Database Migrations
-
-After the first deployment:
-
-1. **Open Railway CLI or use the web terminal:**
-   ```bash
-   # Install Railway CLI (if not installed)
    npm install -g @railway/cli
-   
-   # Login to Railway
-   railway login
-   
-   # Link to your project
-   railway link
-   
-   # Run migrations
-   railway run pnpm db:push
    ```
 
-2. **Alternative: Use Railway's web terminal:**
-   - In your Railway project
-   - Click on your web service
-   - Go to "Settings" > "Deploy"
-   - Use the terminal to run: `pnpm db:push`
-
-## Step 7: Seed Initial Data
-
-1. **Seed the database with initial content:**
+2. Login to Railway:
    ```bash
+   railway login
+   ```
+
+3. Link to your project:
+   ```bash
+   railway link
+   ```
+
+4. Run migrations and seed data:
+   ```bash
+   railway run pnpm db:push
    railway run pnpm tsx server/seed-complete.mjs
    railway run pnpm tsx server/seed-achievements.mjs
    ```
 
-2. **This will populate:**
-   - 8+ comprehensive lessons
-   - 2 interactive quizzes
-   - 30+ glossary terms
-   - 15 achievement badges
+### Option B: Using Railway Dashboard
 
-## Step 8: Configure Custom Domain (Optional)
+1. Go to your service → **Settings** → **Deploy**
+2. Under "Custom Start Command", temporarily set:
+   ```
+   pnpm db:push && pnpm tsx server/seed-complete.mjs && pnpm tsx server/seed-achievements.mjs && pnpm start
+   ```
+3. Redeploy
+4. After successful deployment, remove the custom start command (it will use the default from package.json)
 
-1. **In Railway project settings:**
-   - Go to "Settings" > "Domains"
-   - Click "Generate Domain" for a free Railway subdomain
-   - Or click "Custom Domain" to add your own domain
+## Step 6: Test Your Deployment
 
-2. **For custom domains:**
-   - Add your domain in Railway
-   - Update your domain's DNS records as instructed
+After deployment, test these features:
+
+1. **Homepage**: Visit your Railway URL (e.g., `picknlearn-production.up.railway.app`)
+2. **Registration**: Click "Sign Up" and create an account with email/password
+3. **Login**: Sign in with your new account
+4. **Dashboard**: Access `/dashboard` to see your profile and progress
+5. **Lessons**: Browse 8 comprehensive lessons at `/lessons`
+6. **Quizzes**: Take interactive quizzes at `/quizzes`
+7. **Glossary**: Check 30+ terms at `/glossary`
+
+## Step 7: Configure Custom Domain (Optional)
+
+1. Go to your service → **Settings** → **Domains**
+2. Click **"Generate Domain"** for a Railway subdomain (e.g., `picknlearn-production.up.railway.app`)
+3. Or add your own custom domain:
+   - Click "Custom Domain"
+   - Enter your domain name
+   - Update your DNS records as instructed
    - Railway provides automatic SSL certificates
 
-## Step 9: Enable Auto-Deployment
+## Step 8: Enable Auto-Deploy from GitHub
 
-Railway automatically enables auto-deployment from GitHub:
-
-1. **Every push to your main branch will:**
-   - Trigger a new deployment
-   - Run build process
-   - Deploy automatically
-   - Zero downtime
-
-2. **To deploy changes:**
-   ```bash
-   git add .
-   git commit -m "Your commit message"
-   git push origin main
-   ```
-
-## Step 10: Verify Deployment
-
-1. **Check deployment status:**
-   - Go to your Railway project
-   - Click on "Deployments" tab
-   - Wait for "Success" status
-
-2. **Test your application:**
-   - Click on the generated URL
-   - Verify all pages load correctly
-   - Test authentication (Sign In)
-   - Check lessons, quizzes, glossary
-   - Test dashboard features
+1. Go to your service → **Settings** → **Source**
+2. Ensure **"Auto-deploy"** is enabled
+3. Now every push to the `main` branch will automatically deploy
 
 ## Troubleshooting
 
+### Build Fails
+
+**Check build logs:**
+- Go to Railway dashboard → Your service → Deployments
+- Click on the failed deployment
+- Review error messages
+
+**Common issues:**
+- Missing dependencies in `package.json`
+- TypeScript errors (run `pnpm tsc --noEmit` locally)
+- Node.js version mismatch
+
 ### Database Connection Issues
 
-If you see database connection errors:
+**Verify DATABASE_URL:**
+- Go to MySQL service → Variables tab
+- Copy the exact `DATABASE_URL` value
+- Paste it into your web service variables
+- Ensure no extra spaces or characters
 
-1. **Verify DATABASE_URL:**
-   - Check that it's correctly copied from MySQL service
-   - Ensure no extra spaces or characters
+**Check MySQL status:**
+- MySQL service should show "Active" status
+- If not, restart the MySQL service
 
-2. **Check MySQL service status:**
-   - Go to MySQL service in Railway
-   - Verify it's running (green status)
+**Run migrations again:**
+```bash
+railway run pnpm db:push
+```
 
-3. **Run migrations again:**
-   ```bash
-   railway run pnpm db:push
-   ```
+### Authentication Not Working
 
-### Build Failures
+**Verify JWT_SECRET:**
+- Ensure `JWT_SECRET` is set in environment variables
+- Must be a strong random string (64+ characters recommended)
+- Never use the example secret in production
 
-If deployment fails during build:
+**Check browser console:**
+- Open browser DevTools (F12)
+- Look for authentication errors
+- Verify API requests are returning 200 status
 
-1. **Check build logs:**
-   - Go to "Deployments" tab
-   - Click on the failed deployment
-   - Review error messages
-
-2. **Common issues:**
-   - Missing environment variables
-   - TypeScript errors (run `pnpm check` locally)
-   - Dependency issues (ensure `package.json` is committed)
+**Clear browser data:**
+- Clear localStorage: `localStorage.clear()`
+- Clear cookies
+- Try registration/login again
 
 ### Application Crashes
 
-If app crashes after deployment:
+**Check runtime logs:**
+```bash
+railway logs
+```
 
-1. **Check runtime logs:**
-   - Go to your web service
-   - Click "Logs" tab
-   - Look for error messages
+Or in Railway dashboard:
+- Go to your service → Logs tab
+- Look for error messages
 
-2. **Common issues:**
-   - Missing JWT_SECRET
-   - Database connection timeout
-   - Port binding issues (Railway handles this automatically)
+**Common issues:**
+- Missing `JWT_SECRET` environment variable
+- Database connection timeout (check `DATABASE_URL`)
+- Port binding issues (ensure `PORT=8080` is set)
 
-## Environment-Specific Notes
+### "Invalid URL" Error
 
-### Development vs Production
+This usually means missing environment variables:
+- Ensure `PORT=8080` is set
+- Verify `NODE_ENV=production` is set
+- Check that all required variables are configured
 
-The application automatically detects the environment:
+## Environment Variables Reference
 
-- **Development:** `NODE_ENV=development` (local)
-- **Production:** `NODE_ENV=production` (Railway)
+| Variable | Required | Description | Example |
+|----------|----------|-------------|---------|
+| `DATABASE_URL` | ✅ Yes | MySQL connection string from Railway | `mysql://root:pass@host:3306/railway` |
+| `PORT` | ✅ Yes | Server port | `8080` |
+| `NODE_ENV` | ✅ Yes | Environment | `production` |
+| `JWT_SECRET` | ✅ Yes | Strong random secret for JWT tokens | Generate your own 64+ char string |
 
-### Database Differences
+## Security Best Practices
 
-- **Local:** TiDB (MySQL-compatible) provided by Manus
-- **Railway:** MySQL 8.0+
-- **Schema:** Identical, fully compatible
+1. **JWT Secret:**
+   - Generate a strong random string (64+ characters)
+   - Never commit secrets to GitHub
+   - Rotate periodically for security
 
-### Authentication
+2. **Database:**
+   - Use Railway's private networking (automatic)
+   - Enable SSL connections (automatic)
+   - Set up regular backups in Railway
 
-The authentication system uses Manus OAuth, which works in both environments. If you want to implement custom authentication in the future, you'll need to:
+3. **HTTPS:**
+   - Railway provides automatic HTTPS
+   - All traffic is encrypted
+   - SSL certificates auto-renewed
 
-1. Replace OAuth logic in `server/_core/oauth.ts`
-2. Update authentication context in `server/_core/context.ts`
-3. Implement custom login/signup pages
+4. **Password Security:**
+   - Passwords are hashed with bcrypt (10 rounds)
+   - Never stored in plain text
+   - Minimum 6 characters enforced
 
 ## Monitoring & Maintenance
 
 ### View Logs
 
+**Using Railway CLI:**
 ```bash
-# Using Railway CLI
 railway logs
-
-# Or use Railway web dashboard
-# Go to your service > Logs tab
 ```
+
+**Using Railway Dashboard:**
+- Go to your service → Logs tab
+- Filter by severity (info, warning, error)
+- Search for specific errors
 
 ### Database Backups
 
-Railway provides automatic backups for MySQL:
-
+**Enable automatic backups:**
 1. Go to MySQL service
 2. Click "Backups" tab
 3. Configure backup frequency
 4. Download backups as needed
 
-### Scaling
+**Manual backup:**
+```bash
+railway run mysqldump -u root -p railway > backup.sql
+```
 
-Railway automatically scales based on usage:
+### Performance Monitoring
 
-- **Free tier:** Limited resources
-- **Paid plans:** Auto-scaling, more resources
-- **Upgrade:** Go to "Settings" > "Plan"
+**Railway provides:**
+- CPU usage metrics
+- Memory usage metrics
+- Network traffic
+- Response times
+
+**Access metrics:**
+- Go to your service → Metrics tab
+- View real-time and historical data
 
 ## Cost Estimates
 
 ### Railway Pricing
 
-- **Free tier:** $5 credit/month
-  - Suitable for development/testing
-  - Limited to 500 hours/month
-
-- **Hobby plan:** $5/month
+- **Hobby Plan**: $5/month
+  - 500 hours of usage
+  - Suitable for small projects
+  
+- **Pro Plan**: $20/month
   - Unlimited hours
   - Better performance
   - Priority support
 
-- **Pro plan:** $20/month+
-  - Team features
-  - Advanced scaling
-  - SLA guarantees
-
 ### MySQL Database
 
-- **Included in plan limits**
-- **Storage:** Charged per GB
-- **Typical usage:** 100-500 MB for this app
+- **Storage**: ~$0.25/GB per month
+- **Typical usage**: 100-500 MB for this app
+- **Estimated cost**: $1-2/month
 
-## Security Best Practices
+### Total Monthly Cost
 
-1. **Environment Variables:**
-   - Never commit `.env` files
-   - Use strong JWT_SECRET
-   - Rotate secrets regularly
+- **Hobby**: ~$6-7/month
+- **Pro**: ~$21-22/month
 
-2. **Database:**
-   - Use Railway's private networking
-   - Enable SSL connections
-   - Regular backups
+## Updating Your Application
 
-3. **Authentication:**
-   - Keep OAuth credentials secure
-   - Monitor failed login attempts
-   - Implement rate limiting if needed
+### Push Updates to GitHub
 
-4. **Updates:**
-   - Keep dependencies updated
-   - Monitor security advisories
-   - Test updates in staging first
+```bash
+# Make your changes locally
+git add .
+git commit -m "Your update description"
+git push origin main
+```
+
+Railway will automatically:
+1. Detect the push
+2. Build the new version
+3. Deploy with zero downtime
+4. Rollback if deployment fails
+
+### Manual Deployment
+
+In Railway dashboard:
+1. Go to your service → Deployments
+2. Click "Redeploy" on any previous deployment
+3. Or trigger a new deployment from GitHub
+
+## Database Migrations
+
+When you update the database schema:
+
+1. **Update `drizzle/schema.ts`** locally
+2. **Generate migration:**
+   ```bash
+   pnpm db:push
+   ```
+3. **Commit and push** to GitHub
+4. **Run migration on Railway:**
+   ```bash
+   railway run pnpm db:push
+   ```
 
 ## Support & Resources
 
-- **Railway Documentation:** https://docs.railway.app
-- **Railway Discord:** https://discord.gg/railway
-- **GitHub Issues:** Create issues in your repository
-- **Railway Status:** https://status.railway.app
+- **Railway Documentation**: https://docs.railway.app
+- **Railway Discord**: https://discord.gg/railway
+- **Railway Status**: https://status.railway.app
+- **GitHub Repository**: https://github.com/ashwin24121995/picknlearn
+- **Create Issues**: https://github.com/ashwin24121995/picknlearn/issues
 
-## Next Steps
+## Next Steps After Deployment
 
-After successful deployment:
+1. **Test thoroughly:**
+   - Create test accounts
+   - Complete lessons and quizzes
+   - Test all features
 
-1. **Add more content:**
-   - Create additional lessons
+2. **Add content:**
+   - Create more lessons (target: 15-20 total)
    - Add more quizzes
    - Expand glossary
 
-2. **Customize branding:**
-   - Update logo and favicon
-   - Customize color scheme
-   - Add your own content
+3. **Customize:**
+   - Update branding and colors
+   - Add your logo
+   - Customize content
 
-3. **Monitor usage:**
-   - Set up analytics
-   - Track user engagement
-   - Gather feedback
+4. **Monitor:**
+   - Set up error tracking
+   - Monitor user activity
+   - Track performance
 
-4. **Optimize performance:**
+5. **Optimize:**
    - Enable caching
    - Optimize images
-   - Monitor load times
+   - Improve load times
+
+## What's Included
+
+Your deployed platform includes:
+
+- ✅ **8 comprehensive lessons** (3000-5000 words each)
+- ✅ **2 interactive quizzes** with 10 questions
+- ✅ **30+ glossary terms** with definitions and examples
+- ✅ **15 achievement badges** for user progress
+- ✅ **User dashboard** with progress tracking
+- ✅ **Bookmark system** for lessons and terms
+- ✅ **Premium dark theme** with glass-morphism effects
+- ✅ **4 CSS visual components** for educational content
+- ✅ **Legal pages**: Terms, Privacy, Responsible Learning
+- ✅ **18+ age disclaimer** and state restrictions
+- ✅ **Fully responsive** mobile and desktop design
 
 ---
 
-**Congratulations!** Your Pick N Learn platform is now live on Railway with MySQL database and auto-deployment from GitHub. 🎉
+**Congratulations!** Your Pick N Learn platform is now live on Railway with custom authentication and MySQL database. 🎉
+
+**Important Reminder**: This platform uses **custom email/password authentication**. There are no OAuth dependencies or external authentication services. All user data is stored securely in your MySQL database.
