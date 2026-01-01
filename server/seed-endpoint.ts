@@ -41,6 +41,7 @@ router.post("/api/seed-database", async (req, res) => {
         estimatedMinutes: 10,
         orderIndex: 1,
         isPublished: true,
+        tags: ["basics", "getting-started"],
       },
       {
         title: "Understanding Player Roles",
@@ -52,6 +53,7 @@ router.post("/api/seed-database", async (req, res) => {
         estimatedMinutes: 15,
         orderIndex: 2,
         isPublished: true,
+        tags: ["fundamentals", "player-roles"],
       },
       {
         title: "Reading Player Statistics",
@@ -63,6 +65,7 @@ router.post("/api/seed-database", async (req, res) => {
         estimatedMinutes: 20,
         orderIndex: 1,
         isPublished: true,
+        tags: ["statistics", "analysis"],
       },
       {
         title: "Analyzing Recent Form",
@@ -74,6 +77,7 @@ router.post("/api/seed-database", async (req, res) => {
         estimatedMinutes: 18,
         orderIndex: 2,
         isPublished: true,
+        tags: ["form", "analysis", "selection"],
       },
       {
         title: "Building a Balanced Team",
@@ -85,6 +89,7 @@ router.post("/api/seed-database", async (req, res) => {
         estimatedMinutes: 25,
         orderIndex: 1,
         isPublished: true,
+        tags: ["team-building", "strategy"],
       },
       {
         title: "Captain and Vice-Captain Selection",
@@ -96,83 +101,119 @@ router.post("/api/seed-database", async (req, res) => {
         estimatedMinutes: 20,
         orderIndex: 2,
         isPublished: true,
+        tags: ["captain", "strategy", "advanced"],
       },
     ]);
 
     // Seed quizzes
     await db.insert(quizzes).values([
       {
-        title: "Fantasy Cricket Basics Quiz",
-        slug: "fantasy-cricket-basics",
-        description: "Test your understanding of fantasy cricket fundamentals and basic concepts.",
+        title: "Fantasy Cricket Fundamentals Quiz",
+        slug: "fantasy-cricket-fundamentals-quiz",
+        description: "Test your understanding of fantasy cricket basics",
         difficulty: "beginner",
         passingScore: 70,
-        timeLimit: 600,
+        timeLimit: 10,
         isPublished: true,
       },
       {
-        title: "Player Selection Mastery",
-        slug: "player-selection-mastery",
-        description: "Challenge yourself on player analysis, statistics interpretation, and selection strategies.",
+        title: "Player Analysis Quiz",
+        slug: "player-analysis-quiz",
+        description: "Test your player analysis and selection skills",
         difficulty: "intermediate",
         passingScore: 75,
-        timeLimit: 900,
+        timeLimit: 15,
         isPublished: true,
       },
       {
-        title: "Advanced Team Building",
-        slug: "advanced-team-building",
-        description: "Test your advanced knowledge of team composition, budget management, and strategic planning.",
+        title: "Advanced Strategy Quiz",
+        slug: "advanced-strategy-quiz",
+        description: "Master-level questions on fantasy cricket strategy",
         difficulty: "advanced",
         passingScore: 80,
-        timeLimit: 1200,
+        timeLimit: 20,
         isPublished: true,
       },
     ]);
 
     // Seed quiz questions
     await db.insert(quizQuestions).values([
-      { 
-        quizId: 1, 
-        question: "How many players can you select in a standard fantasy cricket team?", 
-        questionType: "multiple_choice", 
+      // Fundamentals Quiz Questions
+      {
+        quizId: 1,
+        questionType: "multiple_choice",
+        question: "How many players can you select in a fantasy cricket team?",
         options: ["9 players", "11 players", "13 players", "15 players"],
-        correctAnswer: "1",
-        explanation: "A standard fantasy cricket team consists of 11 players, just like a real cricket team.",
-        points: 10, 
-        orderIndex: 1 
+        correctAnswer: "11 players",
+        explanation: "A fantasy cricket team consists of 11 players, just like a real cricket team.",
+        orderIndex: 1,
       },
-      { 
-        quizId: 1, 
-        question: "What multiplier does the captain receive for their points?", 
-        questionType: "multiple_choice", 
-        options: ["1.5x", "2x", "2.5x", "3x"],
-        correctAnswer: "1",
-        explanation: "The captain receives a 2x multiplier on their points, making captain selection crucial.",
-        points: 10, 
-        orderIndex: 2 
+      {
+        quizId: 1,
+        questionType: "multiple_choice",
+        question: "What multiplier does the captain get in fantasy cricket?",
+        options: ["1.5x points", "2x points", "2.5x points", "3x points"],
+        correctAnswer: "2x points",
+        explanation: "The captain earns 2x points, while the vice-captain earns 1.5x points.",
+        orderIndex: 2,
       },
-      { 
-        quizId: 1, 
-        question: "Which player role is mandatory to have at least one of in your team?", 
-        questionType: "multiple_choice", 
-        options: ["Batsman", "Bowler", "Wicket-keeper", "All-rounder"],
-        correctAnswer: "2",
-        explanation: "You must have at least one wicket-keeper in your fantasy cricket team.",
-        points: 10, 
-        orderIndex: 3 
+      {
+        quizId: 1,
+        questionType: "multiple_choice",
+        question: "Which player role is mandatory in every fantasy cricket team?",
+        options: ["All-rounder", "Wicket-keeper", "Opening batsman", "Fast bowler"],
+        correctAnswer: "Wicket-keeper",
+        explanation: "Every fantasy cricket team must include at least one wicket-keeper.",
+        orderIndex: 3,
+      },
+      // Player Analysis Quiz Questions
+      {
+        quizId: 2,
+        questionType: "multiple_choice",
+        question: "What does a player's strike rate measure in batting?",
+        options: ["Runs per match", "Runs per 100 balls", "Wickets per match", "Catches per match"],
+        correctAnswer: "Runs per 100 balls",
+        explanation: "Strike rate is calculated as (runs scored / balls faced) × 100.",
+        orderIndex: 1,
+      },
+      {
+        quizId: 2,
+        questionType: "multiple_choice",
+        question: "Which statistic is most important for evaluating a bowler's economy?",
+        options: ["Runs per over", "Wickets per match", "Batting average", "Strike rate"],
+        correctAnswer: "Runs per over",
+        explanation: "Economy rate (runs per over) shows how well a bowler restricts scoring.",
+        orderIndex: 2,
+      },
+      // Advanced Strategy Quiz Questions
+      {
+        quizId: 3,
+        questionType: "multiple_choice",
+        question: "What is a 'differential pick' in fantasy cricket?",
+        options: [
+          "A player owned by very few teams",
+          "A player with the highest price",
+          "A player who is the captain",
+          "A player from the losing team"
+        ],
+        correctAnswer: "A player owned by very few teams",
+        explanation: "Differential picks are low-ownership players who can give you an edge if they perform well.",
+        orderIndex: 1,
       },
     ]);
 
+    await connection.end();
+
     res.json({
       success: true,
-      message: "Database seeded successfully! Created 4 categories, 6 lessons, and 3 quizzes with questions.",
+      message: "Database seeded successfully with 4 categories, 6 lessons, 3 quizzes, and 6 quiz questions!",
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Seed error:", error);
     res.status(500).json({
       success: false,
-      message: error instanceof Error ? error.message : "Failed to seed database",
+      message: "Failed to seed database",
+      error: error.message,
     });
   }
 });

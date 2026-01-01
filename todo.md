@@ -485,3 +485,12 @@
 - [x] Server restarted successfully
 - [ ] Save checkpoint and push to GitHub
 - [ ] Test authentication on Railway deployment
+
+
+## Populate Database with Lessons and Quizzes (IN PROGRESS)
+- [ ] Wait for Railway to deploy latest changes
+- [ ] Visit /seed-database page on Railway
+- [ ] Click button to populate database
+- [ ] Verify lessons appear on /lessons page
+- [ ] Verify quizzes appear on /quizzes page
+- [ ] Fix any issues with seed endpoint or content display
