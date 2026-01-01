@@ -372,3 +372,12 @@
 - [ ] User needs to: Ensure JWT_SECRET is set in picknlearn service (not MySQL)
 - [ ] User needs to: Trigger redeploy after fixing variables
 - [ ] User needs to: Test deployment after Railway rebuilds
+
+
+## Fix Railway Build-Time Environment Variable Issue (COMPLETED)
+- [x] Investigate why JWT_SECRET is required during build phase - esbuild was evaluating env vars
+- [x] Check server/_core/env.ts for build-time validation - found direct process.env access
+- [x] Move env validation to runtime only (not during build) - converted to getter functions
+- [x] Test build locally without JWT_SECRET - build succeeds
+- [ ] Deploy fix to Railway
+- [ ] Verify deployment succeeds
