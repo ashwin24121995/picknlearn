@@ -1,15 +1,14 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, BookOpen, Trophy, BookMarked, GraduationCap, Shield, Info } from "lucide-react";
+import { Menu, BookOpen, Trophy, BookMarked, GraduationCap, Shield, Info, LogOut } from "lucide-react";
 import { useState } from "react";
-import { useAuth } from "@/_core/hooks/useAuth";
-import { getLoginUrl } from "@/const";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function Navigation() {
   const [location] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
 
   const navItems = [
     { href: "/", label: "Home", icon: BookOpen },
@@ -22,6 +21,11 @@ export function Navigation() {
   const isActive = (href: string) => {
     if (href === "/") return location === "/";
     return location.startsWith(href);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setMobileOpen(false);
   };
 
   return (
@@ -63,17 +67,31 @@ export function Navigation() {
               <Link href="/dashboard">
                 <a>
                   <Button variant="outline">
-                    {user?.name || "Dashboard"}
+                    {user?.name || user?.email || "Dashboard"}
+                  </Button>
+                </a>
+              </Link>
+              <Button variant="ghost" size="icon" onClick={handleLogout} title="Logout">
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link href="/login">
+                <a>
+                  <Button variant="ghost">
+                    Sign In
+                  </Button>
+                </a>
+              </Link>
+              <Link href="/register">
+                <a>
+                  <Button variant="default" className="glow-primary">
+                    Sign Up
                   </Button>
                 </a>
               </Link>
             </>
-          ) : (
-            <a href={getLoginUrl()}>
-              <Button variant="default" className="glow-primary">
-                Sign In
-              </Button>
-            </a>
           )}
         </div>
 
@@ -106,19 +124,36 @@ export function Navigation() {
               
               <div className="pt-4 border-t border-border">
                 {isAuthenticated ? (
-                  <Link href="/dashboard">
-                    <a onClick={() => setMobileOpen(false)}>
-                      <Button variant="outline" className="w-full">
-                        {user?.name || "Dashboard"}
-                      </Button>
-                    </a>
-                  </Link>
-                ) : (
-                  <a href={getLoginUrl()}>
-                    <Button variant="default" className="w-full glow-primary">
-                      Sign In
+                  <>
+                    <Link href="/dashboard">
+                      <a onClick={() => setMobileOpen(false)}>
+                        <Button variant="outline" className="w-full mb-2">
+                          {user?.name || user?.email || "Dashboard"}
+                        </Button>
+                      </a>
+                    </Link>
+                    <Button variant="ghost" className="w-full" onClick={handleLogout}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
                     </Button>
-                  </a>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login">
+                      <a onClick={() => setMobileOpen(false)}>
+                        <Button variant="ghost" className="w-full mb-2">
+                          Sign In
+                        </Button>
+                      </a>
+                    </Link>
+                    <Link href="/register">
+                      <a onClick={() => setMobileOpen(false)}>
+                        <Button variant="default" className="w-full glow-primary">
+                          Sign Up
+                        </Button>
+                      </a>
+                    </Link>
+                  </>
                 )}
               </div>
             </div>

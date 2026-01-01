@@ -1,21 +1,107 @@
-import { COOKIE_NAME } from "@shared/const";
-import { getSessionCookieOptions } from "./_core/cookies";
-import { systemRouter } from "./_core/systemRouter";
+import { TRPCError } from "@trpc/server";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as db from "./db";
 import { dashboardRouter } from "./routers-dashboard";
+import { hashPassword, comparePassword, generateToken } from "./auth-utils";
 
 export const appRouter = router({
-  system: systemRouter,
   dashboard: dashboardRouter,
   
   auth: router({
+    // Get current user
     me: publicProcedure.query(opts => opts.ctx.user),
-    logout: publicProcedure.mutation(({ ctx }) => {
-      const cookieOptions = getSessionCookieOptions(ctx.req);
-      ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
-      return { success: true } as const;
+    
+    // Register new user
+    register: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+        password: z.string().min(6),
+        name: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        // Check if user already exists
+        const existingUser = await db.getUserByEmail(input.email);
+        if (existingUser) {
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "User with this email already exists",
+          });
+        }
+
+        // Hash password
+        const hashedPassword = await hashPassword(input.password);
+
+        // Create user
+        const user = await db.createUser(input.email, hashedPassword, input.name);
+
+        // Generate token
+        const token = generateToken({
+          userId: user.id,
+          email: user.email,
+        });
+
+        return {
+          success: true,
+          token,
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          },
+        };
+      }),
+    
+    // Login
+    login: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+        password: z.string(),
+      }))
+      .mutation(async ({ input }) => {
+        // Get user by email
+        const user = await db.getUserByEmail(input.email);
+        if (!user) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Invalid email or password",
+          });
+        }
+
+        // Compare password
+        const isValid = await comparePassword(input.password, user.password);
+        if (!isValid) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Invalid email or password",
+          });
+        }
+
+        // Update last sign in
+        await db.updateUserLastSignIn(user.id);
+
+        // Generate token
+        const token = generateToken({
+          userId: user.id,
+          email: user.email,
+        });
+
+        return {
+          success: true,
+          token,
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          },
+        };
+      }),
+    
+    // Logout
+    logout: publicProcedure.mutation(() => {
+      return { success: true };
     }),
   }),
 
@@ -57,19 +143,13 @@ export const appRouter = router({
         return await db.getUserLessonProgress(ctx.user.id, input.lessonId);
       }),
     
-    updateProgress: protectedProcedure
+    markComplete: protectedProcedure
       .input(z.object({
         lessonId: z.number(),
-        isCompleted: z.boolean(),
-        timeSpent: z.number(),
+        timeSpent: z.number().default(0),
       }))
       .mutation(async ({ ctx, input }) => {
-        await db.updateLessonProgress(
-          ctx.user.id,
-          input.lessonId,
-          input.isCompleted,
-          input.timeSpent
-        );
+        await db.markLessonComplete(ctx.user.id, input.lessonId, input.timeSpent);
         return { success: true };
       }),
   }),
@@ -105,8 +185,8 @@ export const appRouter = router({
       }))
       .mutation(async ({ ctx, input }) => {
         const questions = await db.getQuizQuestions(input.quizId);
-        const quiz = await db.getQuizById(input.quizId);
-        if (!quiz) throw new Error("Quiz not found");
+        const quiz = await db.getQuizBySlug(input.quizId.toString());
+        if (!quiz) throw new TRPCError({ code: "NOT_FOUND", message: "Quiz not found" });
         
         let correctAnswers = 0;
         questions.forEach(q => {
@@ -124,9 +204,9 @@ export const appRouter = router({
           score,
           questions.length,
           correctAnswers,
-          input.timeSpent,
+          input.timeSpent || 0,
           isPassed,
-          input.answers as Record<string, string>
+          input.answers
         );
         
         return {
@@ -155,55 +235,52 @@ export const appRouter = router({
       .query(async ({ input }) => {
         return await db.searchGlossaryTerms(input.query);
       }),
+  }),
+
+  // Bookmarks
+  bookmarks: router({
+    list: protectedProcedure
+      .input(z.object({ itemType: z.enum(["lesson", "glossary"]).optional() }))
+      .query(async ({ ctx, input }) => {
+        return await db.getUserBookmarks(ctx.user.id, input.itemType);
+      }),
     
-    getByCategory: publicProcedure
-      .input(z.object({ category: z.string() }))
-      .query(async ({ input }) => {
-        return await db.getGlossaryTermsByCategory(input.category);
+    add: protectedProcedure
+      .input(z.object({
+        itemType: z.enum(["lesson", "glossary"]),
+        itemId: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        await db.addBookmark(ctx.user.id, input.itemType, input.itemId);
+        return { success: true };
+      }),
+    
+    remove: protectedProcedure
+      .input(z.object({
+        itemType: z.enum(["lesson", "glossary"]),
+        itemId: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        await db.removeBookmark(ctx.user.id, input.itemType, input.itemId);
+        return { success: true };
       }),
   }),
 
-  // Tutorials
-  tutorials: router({
+  // Achievements
+  achievements: router({
     list: publicProcedure.query(async () => {
-      return await db.getAllTutorials();
+      return await db.getAllAchievements();
     }),
     
-    getBySlug: publicProcedure
-      .input(z.object({ slug: z.string() }))
-      .query(async ({ input }) => {
-        const tutorial = await db.getTutorialBySlug(input.slug);
-        if (!tutorial) return null;
-        
-        const steps = await db.getTutorialSteps(tutorial.id);
-        return { ...tutorial, steps };
-      }),
+    userAchievements: protectedProcedure.query(async ({ ctx }) => {
+      return await db.getUserAchievements(ctx.user.id);
+    }),
   }),
 
-  // User Dashboard
-  user: router({
-    stats: protectedProcedure.query(async ({ ctx }) => {
-      return await db.getUserStats(ctx.user.id);
-    }),
-    
-    bookmarks: router({
-      list: protectedProcedure.query(async ({ ctx }) => {
-        return await db.getUserBookmarks(ctx.user.id);
-      }),
-      
-      add: protectedProcedure
-        .input(z.object({ lessonId: z.number() }))
-        .mutation(async ({ ctx, input }) => {
-          await db.addBookmark(ctx.user.id, input.lessonId);
-          return { success: true };
-        }),
-      
-      remove: protectedProcedure
-        .input(z.object({ lessonId: z.number() }))
-        .mutation(async ({ ctx, input }) => {
-          await db.removeBookmark(ctx.user.id, input.lessonId);
-          return { success: true };
-        }),
+  // User Statistics
+  userStats: router({
+    get: protectedProcedure.query(async ({ ctx }) => {
+      return await db.getUserStatistics(ctx.user.id);
     }),
   }),
 });
