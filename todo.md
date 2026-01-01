@@ -415,3 +415,10 @@
 - [x] Update systemRouter to remove notifyOwner
 - [x] Create MySQL schema file (database-schema.sql)
 - [x] Test build without Manus dependencies - SUCCESS
+
+
+## Fix Railway Docker Build - Patches Directory (COMPLETED)
+- [x] Update Dockerfile to copy patches directory before pnpm install
+- [x] Added COPY patches ./patches before dependencies stage
+- [ ] Push fix to Railway
+- [ ] Verify deployment succeeds
