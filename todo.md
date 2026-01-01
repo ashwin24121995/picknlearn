@@ -391,3 +391,13 @@
 - [x] Test build without env vars - succeeds
 - [ ] Push fix to Railway
 - [ ] Verify deployment succeeds
+
+
+## Comprehensive Code Audit for Railway Build (CRITICAL)
+- [ ] Check all TypeScript files for process.env access
+- [ ] Check package.json scripts for env usage
+- [ ] Check if any imports trigger env access at module load
+- [ ] Verify esbuild configuration
+- [ ] Check for any top-level await or immediate execution
+- [ ] Test build in completely clean environment
+- [ ] Consider alternative: use Dockerfile instead of Nixpacks
