@@ -444,6 +444,8 @@
 - [x] Verified database tables exist and are correct
 - [x] Verified environment variables are set (DATABASE_URL, JWT_SECRET, NODE_ENV)
 - [x] Checked server logs - no detailed errors visible
-- [ ] Fix tRPC input format in AuthContext.tsx (line 69) - needs { input: {...} } wrapper
-- [ ] Add error logging to registration endpoint for better debugging
+- [x] Fix tRPC input format in AuthContext.tsx (line 69) - needs { input: {...} } wrapper
+- [x] Found crash cause: drizzle.config.ts missing from Docker build
+- [x] Fix Dockerfile to include drizzle.config.ts
+- [ ] Push fix and test deployment
 - [ ] Test registration after fix
