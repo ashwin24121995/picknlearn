@@ -361,10 +361,14 @@
 - [ ] Test all authentication flows
 
 
-## Fix Railway Deployment Error (COMPLETED)
+## Fix Railway Deployment Error (IN PROGRESS)
 - [x] Investigate "Failed to construct 'URL': Invalid URL" error - caused by old build with Manus OAuth
 - [x] Check environment variables in Railway - need to remove old Manus vars
 - [x] Fix URL construction in const.ts or other files - already fixed in latest code
 - [x] Create deployment fix guide with correct env vars
-- [ ] User needs to: Remove old Manus env vars and trigger redeploy
+- [x] Analyzed logs: Build fails with "secret JWT_SECRET not found"
+- [ ] Fix: Use Variable Reference instead of direct DATABASE_URL
+- [ ] User needs to: Update DATABASE_URL to use ${{MySQL.DATABASE_URL}}
+- [ ] User needs to: Ensure JWT_SECRET is set in picknlearn service (not MySQL)
+- [ ] User needs to: Trigger redeploy after fixing variables
 - [ ] User needs to: Test deployment after Railway rebuilds
