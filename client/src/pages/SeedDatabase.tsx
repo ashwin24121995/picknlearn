@@ -7,7 +7,7 @@ import { Loader2, CheckCircle, XCircle } from "lucide-react";
 
 export default function SeedDatabase() {
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [result, setResult] = useState<{ success: boolean; message: string; error?: string } | null>(null);
 
   const handleSeed = async () => {
     setLoading(true);
@@ -78,6 +78,9 @@ export default function SeedDatabase() {
                     {result.success ? "Success!" : "Error"}
                   </p>
                   <p className="text-sm mt-1">{result.message}</p>
+                  {result.error && (
+                    <p className="text-xs mt-2 font-mono bg-black/20 p-2 rounded">{result.error}</p>
+                  )}
                 </div>
               </div>
             )}

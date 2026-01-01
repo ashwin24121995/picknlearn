@@ -494,3 +494,13 @@
 - [ ] Verify lessons appear on /lessons page
 - [ ] Verify quizzes appear on /quizzes page
 - [ ] Fix any issues with seed endpoint or content display
+
+
+## Fix Seed Endpoint Error on Railway (URGENT)
+- [ ] Check Railway logs for seed endpoint error details
+- [ ] Identify root cause of "Failed to seed database" error
+- [ ] Fix the issue in seed-endpoint.ts
+- [ ] Test seed endpoint locally
+- [ ] Push fix to GitHub
+- [ ] Test on Railway deployment
+- [ ] Verify lessons and quizzes display correctly
