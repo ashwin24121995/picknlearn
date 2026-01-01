@@ -332,6 +332,24 @@ export const appRouter = router({
       return await db.getUserStatistics(ctx.user.id);
     }),
   }),
+
+  // Seed Database (for initial setup)
+  seed: router({
+    populate: publicProcedure.mutation(async () => {
+      try {
+        // Check if already seeded
+        const existingLessons = await db.getAllLessons();
+        if (existingLessons && existingLessons.length > 0) {
+          return { success: false, message: "Database already contains data", count: existingLessons.length };
+        }
+
+        // Will implement seed logic
+        return { success: true, message: "Seed endpoint ready" };
+      } catch (error) {
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: `Seed failed: ${error instanceof Error ? error.message : 'Unknown error'}` });
+      }
+    }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

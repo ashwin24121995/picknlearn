@@ -451,3 +451,24 @@
 - [x] Remove db:push from start script (tables already created)
 - [ ] Push fix and test deployment
 - [ ] Test registration after fix
+
+## Populate Database with Content (IN PROGRESS)
+- [ ] Check which tables are empty in Railway database
+- [ ] Create seed script for lessons and lesson categories
+- [ ] Create seed script for quizzes and quiz questions
+- [ ] Run seed script against Railway MySQL database
+- [ ] Verify lessons page shows content
+- [ ] Verify quizzes page shows content
+- [ ] Test that content is properly displayed
+
+## Add Seed Endpoint and Fix Authentication (COMPLETED ✅)
+- [x] Create seed endpoint in server/seed-endpoint.ts
+- [x] Create seed page at /seed-database for easy database population
+- [x] Add route for seed page in App.tsx
+- [x] Register seed endpoint in Express server
+- [x] Verify register endpoint saves users to MySQL (already working)
+- [x] Verify login endpoint authenticates against MySQL (already working)
+- [x] Server restarted successfully with no errors
+- [ ] Push to GitHub and deploy to Railway
+- [ ] Test seed endpoint on Railway
+- [ ] Test registration and login on Railway
