@@ -3,12 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, BookOpen, Trophy, BookMarked, GraduationCap, Shield, Info, LogOut } from "lucide-react";
 import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import { trpc } from "@/lib/trpc";
 
 export function Navigation() {
   const [location] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { user, isAuthenticated, logout } = useAuth();
+  const { data: user } = trpc.auth.me.useQuery();
+  const isAuthenticated = !!user;
+  
+  const logoutMutation = trpc.auth.logout.useMutation({
+    onSuccess: () => {
+      localStorage.removeItem("auth_token");
+      window.location.href = "/";
+    },
+  });
 
   const navItems = [
     { href: "/", label: "Home", icon: BookOpen },
@@ -24,7 +32,7 @@ export function Navigation() {
   };
 
   const handleLogout = () => {
-    logout();
+    logoutMutation.mutate();
     setMobileOpen(false);
   };
 
