@@ -103,6 +103,55 @@ export const appRouter = router({
     logout: publicProcedure.mutation(() => {
       return { success: true };
     }),
+    
+    // Verify email for password reset
+    verifyEmailForReset: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+      }))
+      .mutation(async ({ input }) => {
+        // Check if user exists
+        const user = await db.getUserByEmail(input.email);
+        if (!user) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "No account found with this email address",
+          });
+        }
+
+        return {
+          success: true,
+          message: "Email verified. You can now reset your password.",
+        };
+      }),
+    
+    // Reset password
+    resetPassword: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+        newPassword: z.string().min(6),
+      }))
+      .mutation(async ({ input }) => {
+        // Get user by email
+        const user = await db.getUserByEmail(input.email);
+        if (!user) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "No account found with this email address",
+          });
+        }
+
+        // Hash new password
+        const hashedPassword = await hashPassword(input.newPassword);
+
+        // Update password
+        await db.updateUserPassword(user.id, hashedPassword);
+
+        return {
+          success: true,
+          message: "Password reset successfully. You can now login with your new password.",
+        };
+      }),
   }),
 
   // Lesson Categories

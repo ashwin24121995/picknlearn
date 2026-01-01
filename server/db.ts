@@ -97,6 +97,15 @@ export async function updateUserLastSignIn(userId: number): Promise<void> {
     .where(eq(users.id, userId));
 }
 
+export async function updateUserPassword(userId: number, hashedPassword: string): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+
+  await db.update(users)
+    .set({ password: hashedPassword, updatedAt: new Date() })
+    .where(eq(users.id, userId));
+}
+
 // ============= Lesson Categories =============
 
 export async function getAllLessonCategories() {

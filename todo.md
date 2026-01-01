@@ -327,3 +327,23 @@
 - [ ] Test login flow (ready for user testing)
 - [ ] Test protected routes (ready for user testing)
 - [ ] Update Railway environment variables (ready for deployment)
+
+
+## Password Reset Feature (COMPLETED)
+- [x] Create password reset endpoint (verify email exists)
+- [x] Create new password update endpoint
+- [x] Add password reset page UI
+- [x] Add "Forgot Password?" link to login page
+- [x] Test password reset flow
+- [ ] Update deployment documentation
+
+
+### Add Header/Footer to Auth Pages (COMPLETED)
+- [x] Add Navigation header to Login page
+- [x] Add Navigation header to Register page
+- [x] Add Navigation header to Forgot Password page
+- [x] Add Footer to Login page
+- [x] Add Footer to Register page
+- [x] Add Footer to Forgot Password page
+- [x] Test navigation on all auth pages
+- [x] Make header and footer glossy/glassy with premium styling
