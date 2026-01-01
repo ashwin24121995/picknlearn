@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
+import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -43,7 +45,9 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-800 to-pink-700 p-4">
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      <div className="flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-800 to-pink-700 p-4 min-h-[calc(100vh-8rem)]">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl">Create Account</CardTitle>
@@ -103,6 +107,8 @@ export default function Register() {
           </CardFooter>
         </form>
       </Card>
+      </div>
+      <Footer />
     </div>
   );
 }

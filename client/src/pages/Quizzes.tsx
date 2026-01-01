@@ -1,12 +1,17 @@
 import { Link } from "wouter";
 import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Clock, Trophy, ArrowRight, CheckCircle } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAuth } from "@/_core/hooks/useAuth";
+// Inline useAuth hook
+function useAuth() {
+  const { data: user } = trpc.auth.me.useQuery();
+  return { isAuthenticated: !!user };
+}
 
 export default function Quizzes() {
   const { data: quizzes, isLoading } = trpc.quizzes.list.useQuery();
@@ -117,6 +122,8 @@ export default function Quizzes() {
           )}
         </div>
       </section>
+      
+      <Footer />
     </div>
   );
 }

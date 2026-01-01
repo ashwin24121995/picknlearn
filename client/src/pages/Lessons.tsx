@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -117,6 +118,8 @@ export default function Lessons() {
           )}
         </div>
       </section>
+      
+      <Footer />
     </div>
   );
 }
