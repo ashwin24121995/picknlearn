@@ -504,3 +504,11 @@
 - [ ] Push fix to GitHub
 - [ ] Test on Railway deployment
 - [ ] Verify lessons and quizzes display correctly
+
+
+## Fix Railway Deployment Crash (URGENT - IN PROGRESS)
+- [ ] Revert package.json start script - remove migration dependency
+- [ ] Remove run-migrations-railway.mjs file
+- [ ] Create working database seed solution
+- [ ] Test seed endpoint on Railway after fix
+- [ ] Populate database with 6 lessons and 3 quizzes
